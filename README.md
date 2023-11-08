@@ -2,6 +2,7 @@
 ## 归并排序
 归并排序，是创建在归并操作上的一种有效的排序算法。算法是采用分治法（Divide and Conquer）的一个非常典型的应用，且各层分治递归可以同时进行。归并排序思路简单，速度仅次于快速排序，为稳定排序算法，一般用于对总体无序，但是各子项相对有序的数列。
 ### 代码实现
+### C
 ```c
 int min(int x, int y) {
     return x < y ? x : y;
@@ -34,6 +35,39 @@ void merge_sort(int arr[], int len) {
         b = a;
     }
     free(b);
+}
+```
+### C++
+```cpp
+template<typename T>
+void merge_sort(T arr[], int len) {
+    T* a = arr;
+    T* b = new T[len];
+    for (int seg = 1; seg < len; seg += seg) {
+        for (int start = 0; start < len; start += seg + seg) {
+            int low = start, mid = min(start + seg, len), high = min(start + seg + seg, len);
+            int k = low;
+            int start1 = low, end1 = mid;
+            int start2 = mid, end2 = high;
+            while (start1 < end1 && start2 < end2)
+                b[k++] = a[start1] < a[start2] ? a[start1++] : a[start2++];
+            while (start1 < end1)
+                b[k++] = a[start1++];
+            while (start2 < end2)
+                b[k++] = a[start2++];
+        }
+        T* temp = a;
+        a = b;
+        b = temp;
+    }
+
+    if (a != arr) {
+        for (int i = 0; i < len; i++)
+            b[i] = a[i];
+        b = a;
+    }
+
+    delete[] b;
 }
 ```
 ## 结语
